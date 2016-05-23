@@ -1,12 +1,20 @@
 require_relative "spec_helper"
 
-describe "Appium Test" do
-  it "should test the app" do
-    addContactButton = @driver.find_element(:name, "Add Contact")
-    addContactButton.click()
-    textFieldsList = @driver.find_elements(:class_name, "android.widget.EditText")
-    textFieldsList[0].send_keys("Some Name")
-    textFieldsList[2].send_keys("Some@example.com")
-    @driver.find_element(:name, "Save").click()
+describe "Guinea Pig" do
+  it "enter a comment" do
+    app = GuineaPigAppPage.new @driver
+    app.textInput.send_keys("My Exceptionally Eloquent Comment")
+    expect(app.textInput.text == "My Exceptionally Eloquent Comment")
+    end
+
+  it "should enter an email address" do
+    app = GuineaPigAppPage.new @driver
+    app.emailTextInput.send_keys("example@email.com")
+    expect(app.emailTextInput.text == "example@email.com")
   end
 end
+
+
+
+
+
