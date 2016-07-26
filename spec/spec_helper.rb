@@ -29,6 +29,8 @@ RSpec.configure do | config |
       }
     }
 
+    caps.merge!({deviceType: "ENV['deviceType']"}) if ENV['deviceType'] != ''
+
     @driver = Appium::Driver.new(caps)
     @driver.start_driver
 
