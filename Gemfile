@@ -7,5 +7,4 @@ gem 'parallel_split_test'
 gem 'sauce_whisk'
 gem 'rake'
 gem 'selenium-webdriver'
-
-
+gem 'json', '~> 2.0'
