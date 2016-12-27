@@ -12,7 +12,12 @@ task :parallel_run do
   ENV['platformName'] = 'Android'
   ENV['app'] = 'https://github.com/saucelabs-sample-test-frameworks/Java-Junit-Appium-Android/blob/master/resources/GuineaPigApp-debug.apk?raw=true'
 
-  system 'parallel_split_test spec'
+  begin
+    @success = true if @success.nil?
+    @result = system 'parallel_split_test spec'
+  ensure
+    @success &= @result
+  end
 end
 
 task :test_android_emulator_5 do
@@ -43,5 +48,5 @@ multitask :test_sauce => [
     #:test_android_device_s6,
     :test_android_s4_4_4
 ] do
-  puts 'Running automation'
+  raise StandardError, "Tests failed!" unless @success
 end
