@@ -7,52 +7,41 @@ end
 task default: :test_sauce
 
 task :parallel_run do
+  ENV['appiumVersion'] = '1.5.3'
+  ENV['deviceOrientation'] = 'portrait'
+  ENV['platformName'] = 'Android'
+  ENV['app'] = 'https://github.com/saucelabs-sample-test-frameworks/Java-Junit-Appium-Android/blob/master/resources/GuineaPigApp-debug.apk?raw=true'
+
   system 'parallel_rspec spec'
 end
 
-task :Andoid_Emulator_Phone_5_1 do
+task :test_android_emulator_5 do
   ENV['deviceName'] = 'Android Emulator'
-  ENV['deviceType'] = 'Phone'
-  ENV['platformName'] = 'Android'
   ENV['platformVersion'] = '5.1'
-  ENV['app'] = 'https://github.com/saucelabs-sample-test-frameworks/Java-Junit-Appium-Android/blob/master/resources/GuineaPigApp-debug.apk?raw=true'
 
   Rake::Task[:parallel_run].execute
 end
 
-task :Andoid_Emulator_Tablet_5_1 do
-  ENV['deviceName'] = 'Android Emulator'
-  ENV['deviceType'] = 'Tablet'
-  ENV['platformName'] = 'Android'
-  ENV['platformVersion'] = '5.1'
-  ENV['app'] = 'https://github.com/saucelabs-sample-test-frameworks/Java-Junit-Appium-Android/blob/master/resources/GuineaPigApp-debug.apk?raw=true'
-
-  Rake::Task[:parallel_run].execute
-end
-
-task :Galaxy_S4_Emulator do
+task :test_android_s4_4_4 do
   ENV['deviceName'] = 'Samsung Galaxy S4 Emulator'
-  ENV['platformName'] = 'Android'
   ENV['platformVersion'] = '4.4'
-  ENV['app'] = 'https://github.com/saucelabs-sample-test-frameworks/Java-Junit-Appium-Android/blob/master/resources/GuineaPigApp-debug.apk?raw=true'
 
   Rake::Task[:parallel_run].execute
 end
 
-task :Galaxy_S5_Device do
-  ENV['deviceName'] = 'Samsung Galaxy S5 Device'
-  ENV['platformName'] = 'Android'
-  ENV['platformVersion'] = '4.4'
-  ENV['app'] = 'https://github.com/saucelabs-sample-test-frameworks/Java-Junit-Appium-Android/blob/master/resources/GuineaPigApp-debug.apk?raw=true'
+task :test_android_device_s6 do
+  ENV['deviceName'] = 'Samsung Galaxy S6 Device'
+  ENV['deviceName'] = 'Samsung Galaxy'
+  ENV['platformVersion'] = '6.0'
 
   Rake::Task[:parallel_run].execute
 end
 
 multitask :test_sauce => [
-    :Andoid_Emulator_Phone_5_1,
-    :Galaxy_S4_Emulator,
-    :Andoid_Emulator_Tablet_5_1,
-    :Galaxy_S5_Device
+    :test_android_emulator_5,
+    # Real Device Not Implemented
+    #:test_android_device_s6,
+    :test_android_s4_4_4
 ] do
   puts 'Running automation'
 end
