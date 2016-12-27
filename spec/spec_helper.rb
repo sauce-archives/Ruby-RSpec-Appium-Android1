@@ -1,58 +1,37 @@
-require "rspec/expectations"
 require "appium_lib"
 require "rspec"
 require "sauce_whisk"
-require "selenium-webdriver"
 require "require_all"
 
-begin
-  require_all "#{File.join(File.expand_path(File.dirname(__FILE__)), '..', 'pages')}"
-rescue
-  puts "no page objects found"
-end
+require_all "#{File.join(File.expand_path(File.dirname(__FILE__)), '..', 'pages')}"
 
+RSpec.configure do |config|
+  config.before(:each) do |example|
+    build_name = ENV['JENKINS_BUILD_NUMBER'] ||
+        ENV['SAUCE_BAMBOO_BUILDNUMBER'] ||
+        ENV['SAUCE_TC_BUILDNUMBER'] ||
+        ENV['SAUCE_BUILD_NAME'] ||
+        'LOCAL'
 
-RSpec.configure do | config |
-
-  config.before(:each) do | example |
-
-    caps = {
-      caps: {
-        platformVersion: "#{ENV['platformVersion']}",
-        deviceName: "#{ENV['deviceName']}",
-        platformName: "#{ENV['platformName']}",
-        app: "#{ENV['app']}",
-        deviceOrientation: 'portrait',
+    capabilities = {
+        platformVersion: ENV['platformVersion'],
+        deviceName: ENV['deviceName'],
+        platformName: ENV['platformName'],
+        app: ENV['app'],
+        deviceOrientation: ENV['portrait'],
         name: example.full_description,
-        appiumVersion: '1.4.16',
-        browserName: ''
-      }
+        appiumVersion: ENV['appiumVersion'],
+        build: build_name
     }
-
-    caps.merge!({deviceType: "ENV['deviceType']"}) if ENV['deviceType'] != ''
+    capabilities['deviceType'] = ENV['deviceType'] if ENV['deviceType']
 
     @driver = Appium::Driver.new(caps)
     @driver.start_driver
-
   end
 
-  config.after(:each) do | example |
-    sessionid = @driver.session_id
+  config.after(:each) do |example|
+    session_id = @driver.session_id
     @driver.driver_quit
-    puts "SauceOnDemandSessionID=#{sessionid} job-name=#{example.full_description}"
-
-
-    if example.exception
-      SauceWhisk::Jobs.fail_job sessionid
-    else
-      SauceWhisk::Jobs.pass_job sessionid
-    end
+    SauceWhisk::Jobs.change_status(session_id, example.exception.nil?)
   end
-
-  #Explicit wait definition
-  def wait_for
-    Selenium::WebDriver::Wait.new(:timeout => 10).until { yield }
-  end
-
-
 end
