@@ -12,7 +12,7 @@ task :parallel_run do
   ENV['platformName'] = 'Android'
   ENV['app'] = 'https://github.com/saucelabs-sample-test-frameworks/Java-Junit-Appium-Android/blob/master/resources/GuineaPigApp-debug.apk?raw=true'
 
-  system 'parallel_rspec spec'
+  system 'parallel_split_test spec'
 end
 
 task :test_android_emulator_5 do
