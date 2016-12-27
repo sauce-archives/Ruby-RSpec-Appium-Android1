@@ -7,13 +7,6 @@ require_all "#{File.join(File.expand_path(File.dirname(__FILE__)), '..', 'pages'
 
 RSpec.configure do |config|
   config.before(:each) do |example|
-    build_name = "Ruby-RSpec-Android-#{ENV['TRAVIS_JOB_NUMBER']}" ||
-        ENV['JENKINS_BUILD_NUMBER'] ||
-        ENV['SAUCE_BAMBOO_BUILDNUMBER'] ||
-        ENV['SAUCE_TC_BUILDNUMBER'] ||
-        ENV['SAUCE_BUILD_NAME'] ||
-        'LOCAL'
-
     capabilities = {
         platformVersion: ENV['platformVersion'],
         deviceName: ENV['deviceName'],
@@ -22,7 +15,7 @@ RSpec.configure do |config|
         deviceOrientation: ENV['portrait'],
         name: example.full_description,
         appiumVersion: ENV['appiumVersion'],
-        build: build_name
+        build: ENV['BUILD_TAG'] || "Unknown Build"
     }
     capabilities['deviceType'] = ENV['deviceType'] if ENV['deviceType']
 
