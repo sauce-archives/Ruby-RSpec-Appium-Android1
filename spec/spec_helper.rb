@@ -7,7 +7,8 @@ require_all "#{File.join(File.expand_path(File.dirname(__FILE__)), '..', 'pages'
 
 RSpec.configure do |config|
   config.before(:each) do |example|
-    build_name = ENV['JENKINS_BUILD_NUMBER'] ||
+    build_name = "Ruby-RSpec-Android-#{ENV['TRAVIS_JOB_NUMBER']}" ||
+        ENV['JENKINS_BUILD_NUMBER'] ||
         ENV['SAUCE_BAMBOO_BUILDNUMBER'] ||
         ENV['SAUCE_TC_BUILDNUMBER'] ||
         ENV['SAUCE_BUILD_NAME'] ||
