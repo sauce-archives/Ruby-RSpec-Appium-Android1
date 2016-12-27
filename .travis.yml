@@ -1,0 +1,11 @@
+language: ruby
+rvm:
+- 2.4
+before_install:
+- export | grep SAUCE_
+env:
+  global:
+  - SAUCE_USERNAME=sauce_examples
+addons:
+  jwt:
+    secure: nET1vgqy2yJDnyniwuSiLKYS9Q++A2aoaqcGx6fcZqybvacKTAc2QdEW5p8aDn78spjTvOZXneJkO+chU8VnNQUxH0sTOQC6nfvwc3JV79r0mWUmxQRQLtskBAGKRE7bSeO3weSrhwaVadTeXovqLYAj4KP4BRQmg5tatkLgRLoc2EO/qE5MwOApRlbGdZFt6ZYYR5GX6qW5yM4u92WDcHsM2xVMANibiuCoo+/PYNrxQs+eH7CpKWok8gdFpC5wifDN6EbqGC8kyeCyzBSuSY8zoMUJNT4Gtab9zv5V6NTdHc1PikYvo0Dzc9l3bAIweQWXdbO/CNhD/yxJP4YOjS37BlJKX3yvkaM/SCDDy6jUasGsw9M41zqGln2xTo4NjGb3DoNBt3Y3JYYv4TyGISqbPryJ2MvzZdBCTr4fzV+/AUKeMowQAfnZkhh7lhBrvqfGGGxNz+KaON9B0MP2WGxxsQgvYGIK5tpbfnwxLsjQUC/Jfpm23x6nIQ8dE50mjiExohHUhSyWdWmGhU/uw4aR7W1HyQ9ZW6Y7K6IsEuRCMPSK0YTxlVkkxBh4/58/Ww/EAk46WtHvMKq9yYH170S3NfDyt7LWWcSgF6afc5xmhxEtpgh+FaiN7yev8qBzGm9xRBYKWKXGsoKKuQ59SaRXjqhqACJUnkhn0IFrYNo=
