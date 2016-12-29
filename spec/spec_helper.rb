@@ -15,7 +15,7 @@ RSpec.configure do |config|
         deviceOrientation: ENV['portrait'],
         name: example.full_description,
         appiumVersion: ENV['appiumVersion'],
-        build: ENV['BUILD_TAG'] || "Unknown Build"
+        build: ENV['BUILD_TAG'] || "Unknown Build - #{Time.now.to_i}",
     }
     capabilities['deviceType'] = ENV['deviceType'] if ENV['deviceType']
 
