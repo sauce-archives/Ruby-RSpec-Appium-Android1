@@ -3,8 +3,6 @@ require "rspec"
 require "sauce_whisk"
 require "require_all"
 
-require_all "#{File.join(File.expand_path(File.dirname(__FILE__)), '..', 'pages')}"
-
 RSpec.configure do |config|
   config.before(:each) do |example|
     capabilities = {
@@ -19,7 +17,7 @@ RSpec.configure do |config|
     }
     capabilities['deviceType'] = ENV['deviceType'] if ENV['deviceType']
 
-    @driver = Appium::Driver.new(caps)
+    @driver = Appium::Driver.new(caps: capabilities)
     @driver.start_driver
   end
 

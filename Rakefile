@@ -10,7 +10,7 @@ task :parallel_run do
   ENV['appiumVersion'] = '1.5.3'
   ENV['deviceOrientation'] = 'portrait'
   ENV['platformName'] = 'Android'
-  ENV['app'] = 'https://github.com/saucelabs-sample-test-frameworks/Java-Junit-Appium-Android/blob/master/resources/GuineaPigApp-debug.apk?raw=true'
+  ENV['app'] = 'https://github.com/saucelabs-sample-test-frameworks/GuineaPig-Sample-App/blob/master/android/GuineaPigApp-debug.apk?raw=true'
 
   begin
     @success = true if @success.nil?
