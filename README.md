@@ -19,25 +19,28 @@ This code is provided on an "AS-IS” basis without warranty of any kind, either
     $ gem install bundler
     ```
 
-2. Sauce Credentials
-    * In the terminal export your Sauce Labs Credentials as environmental variables:
+2. Test Object Credentials
+    * Add your TestObject API Key:
     ```
-    $ export SAUCE_USERNAME=<your Sauce Labs username>
-	$ export SAUCE_ACCESS_KEY=<your Sauce Labs access key>
+    $ export TESTOBJECT_API_KEY=<your project's api key>
     ```
+
 3. Project Dependencies
 	* Install packages (Use sudo if necessary)
 	```
 	$ bundle install
 	```
+
+4. Application
+	* Application can be downloaded by clicking [here](https://github.com/testobject/calculator-test-gradle/blob/master/Calculator_2.0.apk)
+
+
 ### Running Tests
 
 Tests in Parallel:
 	```
-	$ rake test_sauce
+	$ bundle exec rake
 	```
-
-[Sauce Labs Dashboard](https://saucelabs.com/beta/dashboard/)
 
 ### Advice/Troubleshooting
 

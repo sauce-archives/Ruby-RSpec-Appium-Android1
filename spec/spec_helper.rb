@@ -5,54 +5,41 @@ require "sauce_whisk"
 require "selenium-webdriver"
 require "require_all"
 
-begin
-  require_all "#{File.join(File.expand_path(File.dirname(__FILE__)), '..', 'pages')}"
-rescue
-  puts "no page objects found"
-end
+require_rel "../pages"
 
+# TODO - remove extension with this code is merged:
+# https://github.com/appium/ruby_lib/pull/538
+require_rel "../extensions"
 
-RSpec.configure do | config |
+Selenium::WebDriver.logger.level = :info
 
-  config.before(:each) do | example |
+RSpec.configure do |config|
 
+  config.before(:each) do |example|
     caps = {
-      caps: {
-        platformVersion: "#{ENV['platformVersion']}",
-        deviceName: "#{ENV['deviceName']}",
-        platformName: "#{ENV['platformName']}",
-        app: "#{ENV['app']}",
-        deviceOrientation: 'portrait',
-        name: example.full_description,
-        appiumVersion: '1.4.16',
-        browserName: ''
-      }
+        testobject_api_key: ENV['TESTOBJECT_API_KEY'],
+        testobject_device: 'LG_Nexus_4_E960_real',
+        testobject_test_name: example.full_description
     }
 
-    caps.merge!({deviceType: "ENV['deviceType']"}) if ENV['deviceType'] != ''
+    appium_lib = {server_url: 'http://appium.testobject.com/wd/hub'}
 
-    @driver = Appium::Driver.new(caps)
+    @driver = Appium::Driver.new(caps: caps, appium_lib: appium_lib)
+
     @driver.start_driver
-
+    @sessionid = @driver.session_id
   end
 
-  config.after(:each) do | example |
-    sessionid = @driver.session_id
+  config.after(:each) do |example|
     @driver.driver_quit
-    puts "SauceOnDemandSessionID=#{sessionid} job-name=#{example.full_description}"
 
-
+    # TODO: use Test Object reporting
     if example.exception
-      SauceWhisk::Jobs.fail_job sessionid
+    #  Report test failed
     else
-      SauceWhisk::Jobs.pass_job sessionid
+    #  Report test passed
     end
-  end
 
-  #Explicit wait definition
-  def wait_for
-    Selenium::WebDriver::Wait.new(:timeout => 10).until { yield }
   end
-
 
 end

@@ -13,8 +13,3 @@ describe "Guinea Pig" do
     expect(app.emailTextInput.text == "example@email.com")
   end
 end
-
-
-
-
-
