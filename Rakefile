@@ -1,29 +1,46 @@
-def run_tests(deviceName, deviceType, platformName, platformVersion, app)
-  system("deviceName=\"#{deviceName}\" deviceType=#{deviceType} platformName=\"#{platformName}\" platformVersion=\"#{platformVersion}\" app=\"#{app}\" parallel_split_test spec")
+require 'rspec/core/rake_task'
+
+ENV['PARALLEL_SPLIT_TEST_PROCESSES'] = '10'
+
+PLATFORMS = %w[ios_xs_sim12 ios_x_sim11 android_em6 android_goog_em7]
+
+PLATFORMS.each do |platform|
+  desc "Run tests in parallel within suite using #{platform}"
+  task platform.to_s do
+    ENV['PLATFORM'] = platform
+    system 'parallel_split_test spec'
+  end
 end
 
-task :Andoid_Emulator_Phone_5_1 do
-  run_tests('Android Emulator', 'Phone', 'Android', '5.1', 'https://github.com/saucelabs-sample-test-frameworks/Java-Junit-Appium-Android/blob/master/resources/GuineaPigApp-debug.apk?raw=true')
+task :default do
+  Rake::Task[:android_goog_em7].execute
 end
 
-task :Andoid_Emulator_Tablet_5_1 do
-  run_tests('Android Emulator', 'Tablet', 'Android', '5.1', 'https://github.com/saucelabs-sample-test-frameworks/Java-Junit-Appium-Android/blob/master/resources/GuineaPigApp-debug.apk?raw=true')
+task default: :test_sauce
+
+
+#
+# For Running Sauce Demo
+#
+
+@success = true
+
+PLATFORMS.each do |platform|
+  task "#{platform}_demo" do
+    ENV['PLATFORM'] = platform
+    begin
+      @result = system 'parallel_split_test spec'
+    ensure
+      @success &= @result
+    end
+  end
 end
 
-task :Galaxy_S4_Emulator do
-  run_tests('Samsung Galaxy S4 Emulator', '', 'Android', '4.4', 'https://github.com/saucelabs-sample-test-frameworks/Java-Junit-Appium-Android/blob/master/resources/GuineaPigApp-debug.apk?raw=true')
-end
-
-task :Galaxy_S5_Device do
-  run_tests('Samsung Galaxy S5 Device', '', 'Android', '4.4', 'https://github.com/saucelabs-sample-test-frameworks/Java-Junit-Appium-Android/blob/master/resources/GuineaPigApp-debug.apk?raw=true')
-end
-
-multitask :test_sauce => [
-    :Andoid_Emulator_Phone_5_1,
-    :Galaxy_S4_Emulator,
-    :Andoid_Emulator_Tablet_5_1,
-    :Galaxy_S5_Device,
-
-  ] do
-    puts 'Running automation'
+desc "Run multiple platforms simultaneously"
+multitask sauce_demo: PLATFORMS.map { |p| "#{p}_demo" } do
+  begin
+    raise StandardError, "Tests failed!" unless @success
+  ensure
+    @success &= @result
+  end
 end

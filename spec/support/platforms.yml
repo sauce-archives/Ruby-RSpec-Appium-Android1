@@ -1,0 +1,32 @@
+ios_x_sim11:
+  appiumVersion: "1.9.1"
+  deviceName: "iPhone X Simulator"
+  deviceOrientation: "portrait"
+  platformVersion: "11.3"
+  platformName: "iOS"
+  simpleIsVisibleCheck: false
+  app: "https://github.com/address-book/mobile_apps/blob/master/AddressBook.app.zip?raw=true"
+ios_xs_sim12:
+  appiumVersion: "1.9.1"
+  deviceName: "iPhone XS Simulator"
+  deviceOrientation: "portrait"
+  platformVersion: "12.0"
+  platformName: "iOS"
+  simpleIsVisibleCheck: false
+  app: "https://github.com/address-book/mobile_apps/blob/master/AddressBook.app.zip?raw=true"
+android_em6:
+  appiumVersion: "1.9.1"
+  deviceName: "Android Emulator"
+  deviceOrientation: "portrait"
+  platformVersion: "6.0"
+  platformName: "Android"
+  app: "https://github.com/address-book/mobile_apps/blob/master/AddressBook.apk?raw=true"
+  appWaitActivity: "com.address.book.MainActivity"
+android_goog_em7:
+  appiumVersion: "1.9.1"
+  deviceName: "Android GoogleAPI Emulator"
+  deviceOrientation: "portrait"
+  platformVersion: "7.1"
+  platformName: "Android"
+  app: "https://github.com/address-book/mobile_apps/blob/master/AddressBook.apk?raw=true"
+  appWaitActivity: "com.address.book.MainActivity"
