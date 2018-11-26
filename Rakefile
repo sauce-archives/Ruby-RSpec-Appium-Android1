@@ -1,52 +1,46 @@
 require 'rspec/core/rake_task'
 
-RSpec::Core::RakeTask.new(:spec) do |spec|
-  spec.pattern = 'spec/**/*_spec.rb'
+ENV['PARALLEL_SPLIT_TEST_PROCESSES'] = '10'
+
+PLATFORMS = %w[ios_xs_sim12 ios_x_sim11 android_em6 android_goog_em7]
+
+PLATFORMS.each do |platform|
+  desc "Run tests in parallel within suite using #{platform}"
+  task platform.to_s do
+    ENV['PLATFORM'] = platform
+    system 'parallel_split_test spec'
+  end
+end
+
+task :default do
+  Rake::Task[:android_goog_em7].execute
 end
 
 task default: :test_sauce
 
-task :parallel_run do
-  ENV['appiumVersion'] = '1.5.3'
-  ENV['deviceOrientation'] = 'portrait'
-  ENV['platformName'] = 'Android'
-  ENV['app'] = 'https://github.com/saucelabs-sample-test-frameworks/GuineaPig-Sample-App/blob/master/android/GuineaPigApp-debug.apk?raw=true'
 
-  begin
-    @success = true if @success.nil?
-    @result = system 'parallel_split_test spec'
-  ensure
-    @success &= @result
+#
+# For Running Sauce Demo
+#
+
+@success = true
+
+PLATFORMS.each do |platform|
+  task "#{platform}_demo" do
+    ENV['PLATFORM'] = platform
+    begin
+      @result = system 'parallel_split_test spec'
+    ensure
+      @success &= @result
+    end
   end
 end
 
-task :test_android_emulator_5 do
-  ENV['deviceName'] = 'Android Emulator'
-  ENV['platformVersion'] = '5.1'
-
-  Rake::Task[:parallel_run].execute
-end
-
-task :test_android_s4_4_4 do
-  ENV['deviceName'] = 'Samsung Galaxy S4 Emulator'
-  ENV['platformVersion'] = '4.4'
-
-  Rake::Task[:parallel_run].execute
-end
-
-task :test_android_device_s6 do
-  ENV['deviceName'] = 'Samsung Galaxy S6 Device'
-  ENV['deviceName'] = 'Samsung Galaxy'
-  ENV['platformVersion'] = '6.0'
-
-  Rake::Task[:parallel_run].execute
-end
-
-multitask :test_sauce => [
-    :test_android_emulator_5,
-    # Real Device Not Implemented
-    #:test_android_device_s6,
-    :test_android_s4_4_4
-] do
-  raise StandardError, "Tests failed!" unless @success
+desc "Run multiple platforms simultaneously"
+multitask sauce_demo: PLATFORMS.map { |p| "#{p}_demo" } do
+  begin
+    raise StandardError, "Tests failed!" unless @success
+  ensure
+    @success &= @result
+  end
 end

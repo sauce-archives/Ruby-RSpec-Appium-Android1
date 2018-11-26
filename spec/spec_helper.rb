@@ -1,29 +1,20 @@
 require "appium_lib"
-require "rspec"
-require "sauce_whisk"
-require "require_all"
+require 'faker'
+require_relative "support/sauce_helpers"
+require_relative "support/mobile_elements"
+require_relative "support/element_actions"
 
 RSpec.configure do |config|
-  config.before(:each) do |example|
-    capabilities = {
-        platformVersion: ENV['platformVersion'],
-        deviceName: ENV['deviceName'],
-        platformName: ENV['platformName'],
-        app: ENV['app'],
-        deviceOrientation: ENV['portrait'],
-        name: example.full_description,
-        appiumVersion: ENV['appiumVersion'],
-        build: ENV['BUILD_TAG'] || "Unknown Build - #{Time.now.to_i}",
-    }
-    capabilities['deviceType'] = ENV['deviceType'] if ENV['deviceType']
+  config.include SauceHelpers
+  config.include MobileElements
+  config.include ElementActions
 
-    @driver = Appium::Driver.new(caps: capabilities)
-    @driver.start_driver
+  config.before(:each) do |test|
+    initialize_browser(test.full_description)
   end
 
   config.after(:each) do |example|
-    session_id = @driver.session_id
+    submit_results(@driver.session_id, !example.exception)
     @driver.driver_quit
-    SauceWhisk::Jobs.change_status(session_id, example.exception.nil?)
   end
 end
