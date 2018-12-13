@@ -14,15 +14,15 @@ task :Galaxy_S4_Emulator do
   run_tests('Samsung Galaxy S4 Emulator', '', 'Android', '4.4', 'https://github.com/saucelabs-sample-test-frameworks/Java-Junit-Appium-Android/blob/master/resources/GuineaPigApp-debug.apk?raw=true')
 end
 
-task :Galaxy_S5_Device do
-  run_tests('Samsung Galaxy S5 Device', '', 'Android', '4.4', 'https://github.com/saucelabs-sample-test-frameworks/Java-Junit-Appium-Android/blob/master/resources/GuineaPigApp-debug.apk?raw=true')
+task :Galaxy_S6_Device do
+  run_tests('Samsung Galaxy S6 GoogleAPI Emulator', '', 'Android', '7.1', 'https://github.com/saucelabs-sample-test-frameworks/Java-Junit-Appium-Android/blob/master/resources/GuineaPigApp-debug.apk?raw=true')
 end
 
 multitask :test_sauce => [
     :Andoid_Emulator_Phone_5_1,
     :Galaxy_S4_Emulator,
     :Andoid_Emulator_Tablet_5_1,
-    :Galaxy_S5_Device,
+    :Galaxy_S6_Device,
 
   ] do
     puts 'Running automation'
